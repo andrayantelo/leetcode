@@ -36,6 +36,7 @@ In the second test case, no order gives an appropriate arrangement of vertical c
 """
 
 import unittest
+from collections import deque
 
 # when would you not be able to stack 2 cubes.. basically never. because you can stack them if they are the same length
 # a cube like this 4 1 2 3
@@ -47,23 +48,28 @@ def stackability(sidelengths):
     
     if leftmost >= rightmost:
         previous_cube = leftmost
-        sidelengths.pop(0)
+        sidelengths.popleft()
     elif rightmost >= leftmost:
         previous_cube = rightmost
-        sidelengths.pop(-1)
+        sidelengths.pop()
         
+    #print("previous_cube before while loop: {}".format(previous_cube))
+    #print("sidelengths before while loop: {}".format(sidelengths))
     while len(sidelengths):
         leftmost = sidelengths[0]
         rightmost = sidelengths[-1]
         
         if leftmost >= rightmost and leftmost <= previous_cube:
             previous_cube = leftmost
-            sidelengths.pop(0)
+            sidelengths.popleft()
         elif rightmost >= leftmost and rightmost <= previous_cube:
             previous_cube = rightmost
-            sidelengths.pop(-1)
+            sidelengths.pop()
         else:
             return "No"
+        
+        #print("previous_cube before next while loop iteration: {}".format(previous_cube))
+        #print("sidelengths: {}".format(sidelengths))
     return "Yes"
         
         
@@ -164,14 +170,28 @@ class TestStackability(unittest.TestCase):
     def test_random_cubes(self):
         self.assertEqual(stackability([3, 3, 5, 1, 2]), "No")
         
+    def test_cubes(self):
+        self.assertEqual(stackability([1, 1, 1, 10, 1, 1, 1]), "No")
+        
+    def test_cubes1(self):
+        self.assertEqual(stackability([10,10,10, 1, 10, 10, 10]), "Yes")
+    
+    def test_cubes2(self):
+        self.assertEqual(stackability([5,4,3,2,1]), "Yes")
+    
+    def test_cubes3(self):
+        self.assertEqual(stackability([1, 2, 3, 4, 5]), "Yes")
+    
+    #def test_cubes4(self):
+    #    self.assertEqual(stackability([], "")
     
     
 if __name__ == "__main__":
-    
+    print(stackability(deque([3, 3, 5, 1, 2])))
 
-    unittest.main()
+    #unittest.main()
     
-    for _ in range(int(input())):
-        num_cubes = int(input())
-        sidelengths = input().split(" ")
-        print(stackability(sidelengths))
+    #for _ in range(int(input())):
+    #    num_cubes = int(input())
+    #    sidelengths = input().split(" ")
+    #    print(stackability(sidelengths))
