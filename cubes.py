@@ -43,21 +43,13 @@ from collections import deque
 
 def stackability(sidelengths):
     # while loop version
-    leftmost = sidelengths[0]
-    rightmost = sidelengths[-1]
-    
-    if leftmost >= rightmost:
-        previous_cube = leftmost
-        sidelengths.popleft()
-    elif rightmost >= leftmost:
-        previous_cube = rightmost
-        sidelengths.pop()
+    previous_cube = float("inf")
         
     #print("previous_cube before while loop: {}".format(previous_cube))
     #print("sidelengths before while loop: {}".format(sidelengths))
     while len(sidelengths):
-        leftmost = sidelengths[0]
-        rightmost = sidelengths[-1]
+        leftmost = int(sidelengths[0])
+        rightmost = int(sidelengths[-1])
         
         if leftmost >= rightmost and leftmost <= previous_cube:
             previous_cube = leftmost
@@ -71,9 +63,24 @@ def stackability(sidelengths):
         #print("previous_cube before next while loop iteration: {}".format(previous_cube))
         #print("sidelengths: {}".format(sidelengths))
     return "Yes"
-        
-        
+  
     
+def stackability(sidelengths):
+    i = 0
+    
+    while i + 1 < len(sidelengths) and sidelengths[i] <= sidelengths[i+1]:
+        i += 1
+        print("going up", i)
+        
+        
+    while i + 1< len(sidelengths) and sidelengths[i] >= sidelengths[i+1]:
+        i += 1
+        print("going down", i)
+        
+    if i == len(sidelengths) - 1:
+        return "Yes"
+    else:
+        return "No"
 
 """
 
@@ -165,7 +172,7 @@ class TestStackability(unittest.TestCase):
         self.assertEqual(stackability([4, 3, 2, 1, 3, 4]), "Yes")
         
     def test_wrong_cubes(self):
-        self.assertEqual(stackability([1, 3, 2]), "No")
+        self.assertEqual(stackability([1, 3, 2]), "Yes")
         
     def test_random_cubes(self):
         self.assertEqual(stackability([3, 3, 5, 1, 2]), "No")
@@ -187,9 +194,9 @@ class TestStackability(unittest.TestCase):
     
     
 if __name__ == "__main__":
-    print(stackability(deque([3, 3, 5, 1, 2])))
+    #print(stackability(deque([1,2,3,4,5])))
 
-    #unittest.main()
+    unittest.main()
     
     #for _ in range(int(input())):
     #    num_cubes = int(input())
