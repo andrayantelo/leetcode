@@ -35,36 +35,170 @@ In the first test case, pick in this order: left - 4, right - 4, left -3 , right
 In the second test case, no order gives an appropriate arrangement of vertical cubes. 3 will always come after either 1 or 2.
 """
 
+import unittest
+from collections import deque
+
 # when would you not be able to stack 2 cubes.. basically never. because you can stack them if they are the same length
 # a cube like this 4 1 2 3
 
-def determine_stackability(sidelenghts):
-    # start by checking if leftmost is less than or equal to the rightmost
-    # if yes, it goes on top of rightmost, and our next block, pop off the one you used
-    # maybe use recursion, our base case is that we have 2 cubese
-    print("working with sidelengths: {}".format(sidelengths))
-    if len(sidelengths) == 0:
+def stackability(sidelengths):
+    # while loop version
+    previous_cube = float("inf")
+        
+    #print("previous_cube before while loop: {}".format(previous_cube))
+    #print("sidelengths before while loop: {}".format(sidelengths))
+    while len(sidelengths):
+        leftmost = int(sidelengths[0])
+        rightmost = int(sidelengths[-1])
+        
+        if leftmost >= rightmost and leftmost <= previous_cube:
+            previous_cube = leftmost
+            sidelengths.popleft()
+        elif rightmost >= leftmost and rightmost <= previous_cube:
+            previous_cube = rightmost
+            sidelengths.pop()
+        else:
+            return "No"
+        
+        #print("previous_cube before next while loop iteration: {}".format(previous_cube))
+        #print("sidelengths: {}".format(sidelengths))
+    return "Yes"
+  
+    
+def stackability(sidelengths):
+    i = 0
+    
+    while i + 1 < len(sidelengths) and sidelengths[i] <= sidelengths[i+1]:
+        i += 1
+        print("going up", i)
+        
+        
+    while i + 1< len(sidelengths) and sidelengths[i] >= sidelengths[i+1]:
+        i += 1
+        print("going down", i)
+        
+    if i == len(sidelengths) - 1:
+        return "Yes"
+    else:
         return "No"
-    if len(sidelengths) == 1 or len(sidelengths) == 2:
+
+"""
+
+def stackability(stack, sidelengths):
+    
+    if len(sidelengths) == 1:
+        return "Yes"
+        
+    # check the outer cubes and take the biggest one
+    # left >= right
+    leftmost = sidelengths[0]
+    rightmost = sidelengths[-1]
+    if leftmost >= rightmost:
+        if len(stack) == 0:
+            stack.append(leftmost)
+        elif leftmost <= stack[0]:
+            stack.pop()
+            stack.append(leftmost)
+        else:
+            return "No"
+        return stackability(stack, sidelengths[1:])
+    
+    elif rightmost >= leftmost:
+        if len(stack) == 0:
+            stack.append(rightmost)
+        elif rightmost <= stack[0]:
+            stack.pop()
+            stack.append(rightmost)
+        else:
+            return "No"
+        return stackability(stack, sidelengths[:len(sidelengths) - 1])
+    else:
+        return "No"
+
+def stackability(stack, sidelengths, startIndex, endIndex):
+   
+    if startIndex == endIndex:
         return "Yes"
     
-    if sidelengths[0] >= sidelengths[-1]:
-        print(sidelengths[1:])
-        return determine_stackability(sidelengths[1:])
-    elif sidelengths[-1] >= sidelengths[0]:
-        print(sidelengths[:len(sidelengths) - 1])
-        return determine_stackability(sidelengths[:len(sidelengths) - 1])
-    return "No"
+    leftmost = sidelengths[startIndex]
+    rightmost = sidelengths[endIndex]
+
+    # the bigger one is first in stack
+    if leftmost >= rightmost:
+        # if stack is empty just append
+        if len(stack) == 0:
+            stack.append(leftmost)
+            # check stackability of rest of cubes
+            startIndex += 1
+            return stackability(stack, sidelengths, startIndex, endIndex)
+        # if stack is not empty, see if leftmost is <= than the top item in stack
+        # if it is, then add it to the stack and continue
+        # if it's not, return "no"
+        elif leftmost <= stack[-1]:
+            stack.pop()
+            stack.append(leftmost)
+            # CONTINUE
+            startIndex += 1
+            return stackability(stack, sidelengths, startIndex, endIndex)
+        else:
+            return "No"
+    elif rightmost >= leftmost:
+        # if stack is empty just append
+        if len(stack) == 0:
+            stack.append(rightmost)
+            endIndex -= 1
+            return stackability(stack, sidelengths, startIndex, endIndex)
+        
+        elif rightmost <= stack[-1]:
+            stack.pop()
+            stack.append(rightmost)
+            #CONTINUE
+            endIndex -= 1
+            return stackability(stack, sidelengths, startIndex, endIndex)
+        else:
+            return "No"
+
+"""
+
+class TestStackability(unittest.TestCase):
+    
+    def test_one_cubes(self):
+        self.assertEqual(stackability([1]), "Yes")
+    
+    def test_equal_cubes(self):
+        self.assertEqual(stackability([4,4,4]*50), "Yes")
+        
+    def test_correct_cubes(self):
+        self.assertEqual(stackability([4, 3, 2, 1, 3, 4]), "Yes")
+        
+    def test_wrong_cubes(self):
+        self.assertEqual(stackability([1, 3, 2]), "Yes")
+        
+    def test_random_cubes(self):
+        self.assertEqual(stackability([3, 3, 5, 1, 2]), "No")
+        
+    def test_cubes(self):
+        self.assertEqual(stackability([1, 1, 1, 10, 1, 1, 1]), "No")
+        
+    def test_cubes1(self):
+        self.assertEqual(stackability([10,10,10, 1, 10, 10, 10]), "Yes")
+    
+    def test_cubes2(self):
+        self.assertEqual(stackability([5,4,3,2,1]), "Yes")
+    
+    def test_cubes3(self):
+        self.assertEqual(stackability([1, 2, 3, 4, 5]), "Yes")
+    
+    #def test_cubes4(self):
+    #    self.assertEqual(stackability([], "")
+    
     
 if __name__ == "__main__":
-    #num_testcases = int(input())
-    #for i in range(num_testcases):
-        
-    #    num_sides = int(input())
-    #    sidelengths = [int(x) for x in input().split(" ")]
+    #print(stackability(deque([1,2,3,4,5])))
+
+    unittest.main()
     
-    #    print(determind_stackability(sidelengths))
-    #sidelengths = [4, 3, 2, 1, 3, 4]
-    sidelengths = [1, 3, 2]
-    #sidelengths = []
-    print(determine_stackability(sidelengths))
+    #for _ in range(int(input())):
+    #    num_cubes = int(input())
+    #    sidelengths = input().split(" ")
+    #    print(stackability(sidelengths))
