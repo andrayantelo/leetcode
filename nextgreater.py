@@ -21,12 +21,11 @@ class Solution:
         great = []
         stack = []
         stack.append(float("inf"))
-        seen = []
         
         nums = list(enumerate(nums))
         i = 0
         # iterate over array to look at each element one by one
-        while i < range(len(nums)):
+        while i < len(nums):
             print("i: {}".format(i))
             current_element = nums[i][1]
             print("current_element: {}".format(current_element))
@@ -53,9 +52,12 @@ class Solution:
                 print('restarting loop')
                 
                 i = 0
+            
             # but when do we break? when we have attempted to look for the
             # next greater element of each element. How do we know this?
-            # keep a seen array?
+            # keep a seen array? TODO WHEN TO BREAK. DO NOT RUN
+            # you break when your index is back to being the index of the 
+            # element whose next greater element you are looking for?
             
             stack.append(current_element)
             print("stack: {}".format(stack))
