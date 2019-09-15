@@ -14,58 +14,38 @@
     The second 1's next greater number needs to search circularly, which is also 2.
 """
 
+import unittest
+
 class Solution:
     def nextGreaterElements(self, nums):
-        print("Looking for next greater elements")
-        greater_elements = {}
-        great = []
-        stack = []
-        stack.append(float("inf"))
-        
-        nums = list(enumerate(nums))
-        i = 0
-        # iterate over array to look at each element one by one
-        while i < len(nums):
-            print("i: {}".format(i))
-            current_element = nums[i][1]
-            print("current_element: {}".format(current_element))
-            prev_el_index = nums[i][0] - 1
-            print("prev_el_index: {}".format(prev_el_index))
-            # we'll want to re-iterate over the array up to i but only
-            # if we didn't find the next greater element between our
-            # current element and the last element
-            
-            # so everything can be the same except when nums[i][1] is not
-            # greater than stack [-1]
-            print("stack[-1]: {}".format(stack[-1]))
-            
-            
-            while current_element > stack[-1] and i!= prev_el_index:
-                greater_elements[stack[-1]] = current_element
-                great.append((stack[-1], current_element))
-                print('great so far: {}'.format(great))
+        stack = [(0, float('inf'))]
+        ng = {}
+        output = []
+        for (i, num) in enumerate(nums):
+            while num > stack[-1][1]:
+                ng[stack[-1]] = num
                 stack.pop()
-            
-            # check if we made it to the last element, if yes
-            # then we want to start over with the loop
-            if i == (len(nums) - 1):
-                print('restarting loop')
+            stack.append((i, num))
+        for (i, num) in enumerate(nums):
+            while num > stack[-1][1]:
+                ng[stack[-1]] = num
+                stack.pop()
+            if (i, num) in ng:
+                output.append(ng[(i, num)])
+            else:
+                output.append(-1)
                 
-                i = 0
-            
-            # but when do we break? when we have attempted to look for the
-            # next greater element of each element. How do we know this?
-            # keep a seen array? TODO WHEN TO BREAK. DO NOT RUN
-            # you break when your index is back to being the index of the 
-            # element whose next greater element you are looking for?
-            
-            stack.append(current_element)
-            print("stack: {}".format(stack))
-            i += 1
-        print(greater_elements)
-        print(great)
-                
+        return output
+
+
+class TestNextGreater(unittest.TestCase):
+    
+    def __init__(self):
+        self.nextGreater = Solution()
         
+    
+    def test_standard(self):
+        self.assert_equal(self.nextGreater.nextGreaterElements([1, 2, 1]), [2, -1, 2])
         
         
         
@@ -75,6 +55,12 @@ if __name__ == '__main__':
    
     
     result = Solution()
-    result.nextGreaterElements(nums1)
+    print(result.nextGreaterElements(nums1))
+    nums2 = [3, 4, 1, 3, 5]
+    print(result.nextGreaterElements(nums2))
+    
+"""
+    itertools.cycle to construct a blackbox (enumerate(nums)) is a blackbox
+"""
     
 
