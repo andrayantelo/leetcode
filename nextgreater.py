@@ -15,6 +15,7 @@
 """
 
 import unittest
+from itertools import chain, repeat
 
 class Solution:
     def nextGreaterElements(self, nums):
@@ -34,6 +35,7 @@ class Solution:
                 output.append(ng[(i, num)])
             else:
                 output.append(-1)
+
                 
         return output
 
