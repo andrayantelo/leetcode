@@ -15,15 +15,17 @@ class Solution:
         if s[i] == '0':
             return 0
         
-        memo[i+1] = self.helper(s, i+1, memo)
-        answer += self.helper(s, i+1, memo)
+        nextDigit = self.helper(s, i+1, memo)
+        memo[i+1] = nextDigit
+        answer += nextDigit
         if i + 1 < len(s):
+            nextDigit = self.helper(s, i + 2, memo)
             if s[i] == '1':
-                memo[i + 2] = self.helper(s, i + 2, memo)
-                answer += self.helper(s, i + 2, memo)
+                memo[i + 2] = nextDigit
+                answer += nextDigit
             if s[i] == '2' and i + 1 < len(s) and s[i+1] < '7':
-                memo[i + 2] = self.helper(s, i + 2, memo)
-                answer += self.helper(s, i + 2, memo)
+                memo[i + 2] = nextDigit
+                answer += nextDigit
         
         #print(memo)
         return answer
