@@ -16,10 +16,31 @@ class ListNode:
         self.val = x
         self.next = None
 
+def getNumber(linked_list):
+        pointer = linked_list
+        num = 0
+        place = 1
+        while (pointer != None):
+            num += pointer.val*place
+            pointer = pointer.next
+            place *= 10
+        return num
+
 class Solution:
     def addTwoNumbers(self, l1, l2):
-        print(l1.val)
+        # the first value is in the ones place
+        num1 = getNumber(l1)
+        num2 = getNumber(l2)
+        total = num1 + num2  # 807
 
+        head = ListNode(total%10) 
+        curr = head
+        total //= 10
+        while(total > 0):
+            curr.next = ListNode(total%10)
+            curr = curr.next
+            total //= 10
+        return head
 
 if __name__ == "__main__":
     l1 = ListNode(2)
@@ -28,7 +49,7 @@ if __name__ == "__main__":
 
     l2 = ListNode(5)
     l2.next = ListNode(6)
-    l2.next = ListNode(4)
+    l2.next.next = ListNode(4)
 
     solution = Solution()
     solution.addTwoNumbers(l1, l2)
