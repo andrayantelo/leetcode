@@ -14,6 +14,9 @@ Output: ""
 Explanation: There is no common prefix among the input strings.
 """
 
+# Complexity O(mn) where m is the length of the prefix, and 
+# n is the length of the list of words we will be checking to 
+# see if they have the prefix
 import unittest
 
 class Solution:
