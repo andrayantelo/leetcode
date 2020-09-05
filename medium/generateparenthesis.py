@@ -14,25 +14,29 @@ For example, given n = 3, a solution set is:
 import unittest
 
 class Solution:
-    def generateParenthesis(self, n):
-        available_open = n - 1
-        available_closed = n
-        size_of_string = n*2
 
+    cache = {}
+
+    def generateParenthesis(self, n):
+        if n in self.cache:
+            return self.cache[n]
         results = []
         # base case
-        if n == 1:
-            return "()"
+        if n == 0:
+            return [""]
         
-        inner = "(" + self.generateParenthesis(n-1) + ")"
-        print(inner)
-        #left = "()" + self.generateParenthesis(n-1)
-        #right = self.generateParenthesis(n-1) + "()"
-
+        for k in range(1, n):
+            lefts = self.generateParenthesis(k)
+            rights = self.generateParenthesis(n - k)
+            for left in lefts:
+                for right in rights:
+                    results.append(left + right)
+        for parenthesis in self.generateParenthesis(n - 1):
+            middle = "(" + parenthesis  + ")"
+            results.append(middle)
         
-        #results.append("(" + "".join(self.generateParenthesis(n - 1)) + ")")
-        #results.append("()" + "".join(self.generateParenthesis(n - 1)))
-        #results.append("".join(self.generateParenthesis(n - 1)) + "()")
+        self.cache[n] = sorted(set(results))
+        return self.cache[n]
 
 
 class TestGenerateParenthesis(unittest.TestCase):
@@ -43,5 +47,7 @@ class TestGenerateParenthesis(unittest.TestCase):
 if __name__ == "__main__":
     solution = Solution()
     n = 3
-    print(solution.generateParenthesis(n))
+    print(len(solution.generateParenthesis(n)))
+    for i in range(5):
+        print(len(solution.generateParenthesis(i)))
         
