@@ -20,11 +20,20 @@ class Solution:
         size_of_string = n*2
 
         results = []
-        curr_result = ["("]
+        # base case
+        if n == 1:
+            return "()"
+        
+        inner = "(" + self.generateParenthesis(n-1) + ")"
+        print(inner)
+        #left = "()" + self.generateParenthesis(n-1)
+        #right = self.generateParenthesis(n-1) + "()"
 
-        for i in range(1, size_of_string):
-            if curr_result[i - 1] == "(" and available_open > 0:
-                 
+        
+        #results.append("(" + "".join(self.generateParenthesis(n - 1)) + ")")
+        #results.append("()" + "".join(self.generateParenthesis(n - 1)))
+        #results.append("".join(self.generateParenthesis(n - 1)) + "()")
+
 
 class TestGenerateParenthesis(unittest.TestCase):
 
@@ -34,5 +43,5 @@ class TestGenerateParenthesis(unittest.TestCase):
 if __name__ == "__main__":
     solution = Solution()
     n = 3
-    solution.generateParenthesis(n)
+    print(solution.generateParenthesis(n))
         
