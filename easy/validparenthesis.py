@@ -32,14 +32,14 @@ class Solution:
         stack = []
         opening_chars = ["(", "{", "["]
         pairs = {
-            ")":"(",
-            "}":"{",
-            "]":"["
+            "(":")",
+            "{":"}",
+            "[":"]"
         }
         for element in s:
             # if there's nothing on the stack, and s is one of
             # (, {, [
-            if not len(stack) or element in opening_chars:
+            if element in opening_chars:
                 # place element on the stack
                 stack.append(element)
             # if we have a closing_char we need to compare with what
@@ -47,18 +47,16 @@ class Solution:
             else:
                 # if the corresponding opening char is at the top of stack
                 # then we good, remove that from the stack and continue
-                if stack[-1] == pairs[element]:
-                    stack.pop()
-                else:
-                    #not valid
+                try:
+                    if pairs[stack[-1]] == element:
+                        stack.pop()
+                    else:
+                        #not valid
+                        return False
+                except IndexError:
                     return False
         # if stack empty, then valid
-        if not len(stack):
-            return True
-        else:
-            return False
-        
-
+        return not len(stack)
 
 
 class TestIsValid(unittest.TestCase):
@@ -86,6 +84,9 @@ class TestIsValid(unittest.TestCase):
 
     def test_one_closing_char(self):
         self.assertFalse(self.solution.isValid(")"))
+    
+    def test_random_char(self):
+        self.assertFalse(self.solution.isValid("(*)"))
 
 if __name__ == "__main__":
     #solution = Solution()
