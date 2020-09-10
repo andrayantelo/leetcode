@@ -22,7 +22,8 @@ class Solution():
         # c was built backwards so reverse it
         c.reverse()
         return c
-
+    
+    # version where a and b are given as arrays and can be different lengths
     def bin_add_diff(self, a, b):
         # the same as before except iterate over the smaller one
         c = []
@@ -42,7 +43,8 @@ class Solution():
         # reverse c
         c.reverse()
         return c 
-
+    
+    # version where a and b are given as string and can be of different lengths
     def bin_add_str(self, a, b):
         # make a be the smaller one so that we don't have to
         # do a bunch of if-else statements to figure it out
